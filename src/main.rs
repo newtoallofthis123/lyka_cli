@@ -1,5 +1,6 @@
 use types::AddCode;
 use clap::Parser;
+use human_panic::setup_panic;
 
 #[derive(Parser, Debug)]
 #[command(name="Lyka", author="Ishan Joshi", version, about="The Pastebin for dogs", long_about = None)]
@@ -27,6 +28,7 @@ mod utils;
 
 #[tokio::main]
 async fn main() {
+    setup_panic!();
     cli::print_splash_screen();
 
     let args = Args::parse();
@@ -82,5 +84,7 @@ async fn main() {
 
     bunt::println!("🔗 Link: {$underline}https://noobscience.rocks/code/{}{/$}", hash);
     utils::copy(format!("https://noobscience.rocks/code/{}", hash).as_str());
-    bunt::println!("Coped to clipboard!")
+    bunt::println!("Copied to clipboard!");
+
+    cli::print_footer();
 }

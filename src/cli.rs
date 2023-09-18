@@ -40,3 +40,7 @@ pub fn spinner()-> indicatif::ProgressBar{
     pb.set_message("Sending Request...");
     pb
 }
+
+pub fn print_footer(){
+    bunt::println!("With {$red}❤️{/$}{$white} from Lkya{/$}");
+}

@@ -18,6 +18,9 @@ struct Args {
 
     #[arg(required=false, short, long, help="The file with the code")]
     file: Option<String>,
+
+    #[arg(required=false, short, long, help="The Code Hash to download")]
+    download: Option<String>,
 }
 
 
@@ -40,6 +43,17 @@ async fn main() {
         lang: String::new()
     };
 
+    if args.download.is_some(){
+        let code = web::get_code(args.download.unwrap()).await;
+        bunt::println!("Received the code!");
+        bunt::println!("📝 Title: {}", code.title);
+        bunt::println!("👤 Author: {}", code.author);
+        bunt::println!("🌐 Language: {}", code.lang);
+        bunt::println!("Saving to file...");
+        utils::save_to_file(code);
+        std::process::exit(0);
+    }
+
     if args.title.is_some(){
         bunt::println!("📝 Title: {}", args.title.clone().unwrap());
         code_to_add.title = args.title.unwrap();
@@ -58,7 +72,10 @@ async fn main() {
         bunt::println!("🌐 Language: {}", args.lang.clone().unwrap());
         code_to_add.lang = args.lang.unwrap();
     } else{
-        code_to_add.lang = cli::show_options(vec!["python", "c", "c++", "java", "javascript", "rust", "go", "ruby", "html", "csss", "text"]).to_string();
+        code_to_add.lang = cli::show_options(vec![
+            "python", "c", "c++", "java", "javascript", "rust", "go", "ruby", "html", "css", "text",
+            "markdown", "jsx", "tsx", "typescript", "json", "toml"
+            ]).to_string();
     }
 
     if args.file.is_none(){

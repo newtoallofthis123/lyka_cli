@@ -1,6 +1,8 @@
-use std::process::Command;
+use std::{process::Command, io::Write};
 
 use clipboard::{ClipboardContext, ClipboardProvider};
+
+use crate::types::Code;
 
 pub fn get_editor() -> Vec<&'static str>{
     // List of text editors to check in order of preference
@@ -44,11 +46,18 @@ pub fn get_ext_from_lang(ext:&str)->String{
         "cpp" => ".cpp".to_string(),
         "java" => ".java".to_string(),
         "python" => ".py".to_string(),
-        "rs" => ".rs".to_string(),
+        "rust" => ".rs".to_string(),
         "go" => ".go".to_string(),
         "ruby" => ".rb".to_string(),
         "html" => ".html".to_string(),
         "css" => ".css".to_string(),
+        "toml" => ".toml".to_string(),
+        "json" => ".json".to_string(),
+        "text" => ".txt".to_string(),
+        "markdown" => ".md".to_string(),
+        "jsx" => ".jsx".to_string(),
+        "tsx" => ".tsx".to_string(),
+        "typescript" => ".ts".to_string(),
         "javascript" => ".js".to_string(),
         _=>".txt".to_string()
     }
@@ -82,4 +91,19 @@ pub fn try_to_get_name()->String{
 pub fn copy(msg: &str){
     let mut board: ClipboardContext = ClipboardProvider::new().unwrap();
     board.set_contents(msg.to_owned()).unwrap();
+}
+
+pub fn save_to_file(code: Code){
+    let prohibited_chars = ['/', '\\', '?', '%', '*', ':', '|', '"', '<', '>', '.'];
+    let mut filename = code.title.clone();
+    filename = filename.to_lowercase().replace(" ", "_");
+    //remove all chars after the last dot
+    let mut filename = filename.split(".").collect::<Vec<&str>>()[0].to_string();
+    for c in prohibited_chars.iter(){
+        filename = filename.replace(*c, "");
+    }
+    let filename = filename + get_ext_from_lang(code.lang.as_str()).as_str() + ".txt";
+    let mut file = std::fs::File::create(filename.clone()).unwrap();
+    file.write_all(code.content.as_bytes()).unwrap();
+    bunt::println!("Saved to file: {$green}{}{/$}", filename);
 }

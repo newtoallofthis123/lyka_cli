@@ -1,4 +1,4 @@
-use crate::types::AddCode;
+use crate::types::{AddCode, Code};
 
 const URL: &str = "https://www.noobscience.rocks/api/code";
 
@@ -35,4 +35,15 @@ pub async fn add_code(code: AddCode) -> String{
     let returned_data = json.as_object().unwrap();
 
     return returned_data.get("hash").unwrap().as_str().unwrap().to_string();
+}
+
+pub async fn get_code(hash: String)-> Code{
+    let client = get_client();
+
+    let pb = crate::cli::spinner();
+    let response = client.get(URL.clone().to_string() + "/" + hash.as_str()).send().await.unwrap();
+    pb.finish_with_message("Done!");
+
+    let json:Code = response.json().await.expect("Failed to get code with the given hash!");
+    return json;
 }

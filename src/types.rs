@@ -11,7 +11,7 @@ pub struct AddCode{
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Code{
     #[serde(rename = "_id")]
-    pub id: i32,
+    pub id: String,
     pub title: String,
     pub author: String,
     pub content: String,

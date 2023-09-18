@@ -4,7 +4,7 @@ The Code Sharing CLI dedicated to my dog Lyka.
 
 ## What is Lyka?
 
-Well, Lyka is a dog. My dog to be exact. She's a 5 year old Shih Tzu and she's the cutest thing ever. It's her birthday today (17th Sep), so I decided to make a CLI dedicated to her.
+Well, Lyka is a dog. My dog to be exact. She's a 5 year old German Shepard and she's the cutest thing ever. It's her birthday today (17th Sep), so I decided to make a CLI dedicated to her.
 
 So, I have a PasteBin service called the NoobPaste which is hosted on my site. It has a public API which is used by this CLI to upload and download pastes. The CLI is written in rust. It is super fast and super easy to use.
 
